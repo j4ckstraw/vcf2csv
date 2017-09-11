@@ -6,7 +6,7 @@ import sys
 import argparse
 import codecs
 
-debug = True
+debug = False
 class Card(object):
     """
     Card class for a record.
@@ -37,8 +37,6 @@ class Card(object):
     TEL = 'TEL;'
 
     def __init__(self, delimiter=';'):
-        # TODO find out why this.
-        # class and instance
         self.delimiter = delimiter
         self.fn = ''
         self.family_name = ''
@@ -49,7 +47,6 @@ class Card(object):
         self.tels = []
 
     def to_vcf(self):
-        # return self.BEGIN"""
         if debug:
             # print(Card.BEGIN + Card.FN + self.fn + Card.END)
             print(Card.BEGIN)
@@ -95,13 +92,11 @@ class Card(object):
 
 
     def to_csv(self):
+        a = [self.fn]
+        a.extend([tel['tel'] for tel in self.tels])
         if debug:
-            print('to_csv')
-            print([ tel['tel'] for tel in self.tels ])
-            print('end')
-            print(delimiter.join([self.fn].extend([ tel['tel'] for tel in self.tels ])))
-        # TODO show all tels.
-        return delimiter.join([self.fn].extend([tel['tel'] for tel in self.tels]))
+            print(self.delimiter.join(a))
+        return self.delimiter.join(a)
 
 
 def parse_argument():
@@ -157,10 +152,12 @@ if __name__ == '__main__':
                     print('TEL error')
                     raise(e)
             if Card.END == line.strip('\r\n'):
-                print('#'*79)
-                # print(record.to_vcf())
+                if debug:
+                    print('#'*79)
+                    # print(record.to_vcf())
+                    print(record.to_csv())
+                # del(record)
                 print(record.to_csv())
-                del(record)
             # print(record.to_vcf())
             line = inf.readline().strip('\r\n')
 
