@@ -11,7 +11,7 @@ debug = False
 def parse_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--infile', help='input file, SHOULD BE .vcf FORMAT VERSION3.0')
-    parser.add_argument('-o', '--outfile', help='output to file')
+    parser.add_argument('-o', '--outfile', help='output to file',default='output.csv')
     parser.add_argument('-d', '--delimiter', help='delimiter, default is semicolon',default=';')
     args = parser.parse_args()
     return args
@@ -26,6 +26,7 @@ if __name__ == '__main__':
     print(infile)
     try:
         inf = codecs.open(infile,'r',encoding='utf-8')
+        outf = codecs.open(outfile,'w',encoding='utf-8')
         # inf = open(infile,'r')
         line = inf.readline().strip('\r\n')
         record = None
@@ -65,10 +66,12 @@ if __name__ == '__main__':
                     print('#'*79)
                     # print(record.to_vcf())
                     print(record.to_csv())
-                print(record.to_csv())
+                # print(record.to_csv())
+                outf.write(record.to_csv())
             line = inf.readline().strip('\r\n')
 
     except Exception as e:
         print(e)
     finally:
         inf.close()
+        outf.close()
