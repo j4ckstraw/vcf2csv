@@ -32,8 +32,7 @@ if __name__ == '__main__':
         record = None
         while line:
             if Card.BEGIN == line:
-                pass
-                record = Card()
+                record = Card(delimiter=delimiter)
             if Card.VERSION == line:
                 pass
             if line.startswith(Card.N):
